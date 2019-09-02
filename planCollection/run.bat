@@ -1,0 +1,1 @@
+planCollection.exe "./data/data.txt"
