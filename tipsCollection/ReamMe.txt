@@ -1,5 +1,5 @@
 1、将文件改成 xlsx 格式
-2、将文件改名放到data目录下,改名为 data.xlsx
+2、将文件改名放到data目录下,改名为 data.xlsx,原始数据那张表的工作表名字改为root
 3、双击parse.bat,执行的时候，不要打开data目录下的 data.xlsx以及 result.xlsx
 4、当屏幕停止滚动，并在最后输出 
 	write all data complete
