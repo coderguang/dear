@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -32,6 +33,23 @@ type Data struct {
 	LastMsgRecvDt  string
 	FriendDt       string
 	JiaoYiDt       string
+}
+
+type TipData struct {
+	Tips string
+	Num  int
+}
+
+type TipDataList []TipData
+
+func (data TipDataList) Len() int {
+	return len(data)
+}
+func (data TipDataList) Less(i, j int) bool {
+	return data[i].Num > data[j].Num
+}
+func (data TipDataList) Swap(i, j int) {
+	data[i], data[j] = data[j], data[i]
 }
 
 func StartParse() {
@@ -95,6 +113,7 @@ func StartParse() {
 				ttdataV, ok := ttdata.(*Data)
 				if !ok {
 					sglog.Error("parse data error")
+					sgthread.DelayExit(2)
 					continue
 				}
 				ttdataV.Tips = v
@@ -115,10 +134,19 @@ func StartParse() {
 
 func WriteXlsx(alldatas map[string][]*Data) {
 	totalline := 0
+	tipsArray := TipDataList{}
 	for k, v := range alldatas {
 		totalline += len(v)
-		sglog.Info("标签:", k, ":", len(v))
+		tmp := TipData{
+			Tips: k, Num: len(v)}
+		tipsArray = append(tipsArray, tmp)
 	}
+	sort.Sort(tipsArray)
+
+	for _, v := range tipsArray {
+		sglog.Info(v.Tips, ":", v.Num)
+	}
+
 	sglog.Info("start write to file ,total write is ", totalline)
 
 	file := excelize.NewFile()
@@ -135,26 +163,31 @@ func WriteXlsx(alldatas map[string][]*Data) {
 	}
 
 	writeIndex := 2
-	for _, v := range alldatas {
-		for _, vv := range v {
-			writeIndexStr := strconv.Itoa(writeIndex)
-			file.SetCellStr(sheetName, orderStr[0]+writeIndexStr, vv.Tips)
-			file.SetCellStr(sheetName, orderStr[1]+writeIndexStr, vv.Head)
-			file.SetCellStr(sheetName, orderStr[2]+writeIndexStr, vv.NickName)
-			file.SetCellStr(sheetName, orderStr[3]+writeIndexStr, vv.WxBeiZhu)
-			file.SetCellStr(sheetName, orderStr[4]+writeIndexStr, vv.TaobaoNickName)
-			file.SetCellStr(sheetName, orderStr[5]+writeIndexStr, vv.YouZanNickName)
-			file.SetCellStr(sheetName, orderStr[6]+writeIndexStr, vv.JDNickName)
-			file.SetCellStr(sheetName, orderStr[7]+writeIndexStr, vv.WxOpenId)
-			file.SetCellStr(sheetName, orderStr[8]+writeIndexStr, vv.IsGZHFans)
-			file.SetCellStr(sheetName, orderStr[9]+writeIndexStr, vv.Sex)
-			file.SetCellStr(sheetName, orderStr[10]+writeIndexStr, vv.Lock)
-			file.SetCellStr(sheetName, orderStr[11]+writeIndexStr, vv.BirthDay)
-			file.SetCellStr(sheetName, orderStr[12]+writeIndexStr, vv.LastMsgSendDt)
-			file.SetCellStr(sheetName, orderStr[13]+writeIndexStr, vv.LastMsgRecvDt)
-			file.SetCellStr(sheetName, orderStr[14]+writeIndexStr, vv.FriendDt)
-			file.SetCellStr(sheetName, orderStr[15]+writeIndexStr, vv.JiaoYiDt)
-			writeIndex++
+	for _, tips := range tipsArray {
+		if v, ok := alldatas[tips.Tips]; ok {
+			for _, vv := range v {
+				writeIndexStr := strconv.Itoa(writeIndex)
+				file.SetCellStr(sheetName, orderStr[0]+writeIndexStr, vv.Tips)
+				file.SetCellStr(sheetName, orderStr[1]+writeIndexStr, vv.Head)
+				file.SetCellStr(sheetName, orderStr[2]+writeIndexStr, vv.NickName)
+				file.SetCellStr(sheetName, orderStr[3]+writeIndexStr, vv.WxBeiZhu)
+				file.SetCellStr(sheetName, orderStr[4]+writeIndexStr, vv.TaobaoNickName)
+				file.SetCellStr(sheetName, orderStr[5]+writeIndexStr, vv.YouZanNickName)
+				file.SetCellStr(sheetName, orderStr[6]+writeIndexStr, vv.JDNickName)
+				file.SetCellStr(sheetName, orderStr[7]+writeIndexStr, vv.WxOpenId)
+				file.SetCellStr(sheetName, orderStr[8]+writeIndexStr, vv.IsGZHFans)
+				file.SetCellStr(sheetName, orderStr[9]+writeIndexStr, vv.Sex)
+				file.SetCellStr(sheetName, orderStr[10]+writeIndexStr, vv.Lock)
+				file.SetCellStr(sheetName, orderStr[11]+writeIndexStr, vv.BirthDay)
+				file.SetCellStr(sheetName, orderStr[12]+writeIndexStr, vv.LastMsgSendDt)
+				file.SetCellStr(sheetName, orderStr[13]+writeIndexStr, vv.LastMsgRecvDt)
+				file.SetCellStr(sheetName, orderStr[14]+writeIndexStr, vv.FriendDt)
+				file.SetCellStr(sheetName, orderStr[15]+writeIndexStr, vv.JiaoYiDt)
+				writeIndex++
+			}
+		} else {
+			sglog.Error("can't find tips,", tips.Tips)
+			sgthread.DelayExit(2)
 		}
 	}
 
