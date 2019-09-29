@@ -1,4 +1,4 @@
-module github.com/coderguang/dear
+module tipsCollection
 
 go 1.12
 
