@@ -1,0 +1,2 @@
+call tipCollection.exe
+pause
