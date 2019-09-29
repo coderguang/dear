@@ -1,0 +1,9 @@
+1、将文件改成 xlsx 格式
+2、将文件改名放到data目录下,改名为 data.xlsx
+3、双击parse.bat,执行的时候，不要打开data目录下的 data.xlsx以及 result.xlsx
+4、当屏幕停止滚动，并在最后输出 
+	write all data complete
+	====please input your cmd====
+	
+	说明执行完毕，如果发现没有出现这个，可能是发生了错误。
+5、结果文件为 data/result.xlsx文件，如果需要找输出记录(统计各标签匹配数),在log/文件夹对应的日期文件
