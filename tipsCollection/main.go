@@ -191,6 +191,18 @@ func WriteXlsx(alldatas map[string][]*Data) {
 		}
 	}
 
+	tipSheetName := "tips"
+	tipIndex := file.NewSheet(tipSheetName)
+	file.SetActiveSheet(tipIndex)
+
+	writeIndex = 1
+	for _, v := range tipsArray {
+		writeIndexStr := strconv.Itoa(writeIndex)
+		file.SetCellStr(tipSheetName, orderStr[0]+writeIndexStr, v.Tips)
+		file.SetCellStr(tipSheetName, orderStr[1]+writeIndexStr, strconv.Itoa(v.Num))
+		writeIndex++
+	}
+
 	err := file.SaveAs("./data/result.xlsx")
 
 	if err != nil {
