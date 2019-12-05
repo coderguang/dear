@@ -38,12 +38,7 @@ func UploadFileHandler() http.HandlerFunc {
 			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
 			return
 		}
-		w.Write([]byte("SUCCESS to commit file,please wait......\n"))
-
-		err = doLogic(w, index, filename, resultfile)
-		if err != nil {
-			renderError(w, "DO_LOGIC_ERROR", http.StatusInternalServerError)
-			return
-		}
+		sglog.Info("SUCCESS to commit file,please wait......\n")
+		doLogic(w, index, filename, resultfile)
 	})
 }

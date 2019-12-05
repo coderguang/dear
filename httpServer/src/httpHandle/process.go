@@ -1,21 +1,21 @@
 package httpHandle
 
 import (
-	"errors"
 	"httpServer/src/config"
 	"httpServer/src/tipCollection"
 	"net/http"
 	"strconv"
 )
 
-func doLogic(w http.ResponseWriter, index int, filename string, resultfile string) error {
+func doLogic(w http.ResponseWriter, index int, filename string, resultfile string) {
 
 	logicType := GlobalTypeList[index]
 
 	switch logicType {
 	case config.TIP_COLLECTION:
-		return tipCollection.DoLogic(w, filename, resultfile)
+		tipCollection.DoLogic(w, filename, resultfile)
+		return
 	}
 
-	return errors.New("unknow logic type,index:" + strconv.Itoa(index) + ",file:" + filename + ",result:" + resultfile)
+	w.Write([]byte("unknow logic type,index:" + strconv.Itoa(index) + ",file:" + filename + ",result:" + resultfile))
 }
