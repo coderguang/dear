@@ -45,6 +45,5 @@ func UploadFileHandler() http.HandlerFunc {
 			renderError(w, "DO_LOGIC_ERROR", http.StatusInternalServerError)
 			return
 		}
-		sglog.Info("do logic ok,", filename)
 	})
 }
