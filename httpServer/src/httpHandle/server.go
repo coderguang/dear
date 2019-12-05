@@ -17,6 +17,7 @@ func UploadFileHandler() http.HandlerFunc {
 		}
 
 		sglog.Info("require data:", r.Form)
+		sglog.Info("muti:", r.MultipartForm)
 
 		// parse and validate file and post parameters
 		file, index, err := checkAllowFiles(w, r)
