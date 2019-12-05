@@ -7,7 +7,6 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/coderguang/GameEngine_go/sglog"
-	"github.com/coderguang/GameEngine_go/sgthread"
 	"github.com/mohae/deepcopy"
 )
 
@@ -66,7 +65,7 @@ func StartParse(filename string, resultfile string, flag chan bool) {
 	rows, err := xls.Rows(sheetName)
 	if err != nil {
 		sglog.Error("读取 ", sheetName, " 工作表 错误,err=", err)
-		sgthread.DelayExit(2)
+		return
 	}
 
 	totalline := 0
@@ -113,8 +112,7 @@ func StartParse(filename string, resultfile string, flag chan bool) {
 				ttdataV, ok := ttdata.(*Data)
 				if !ok {
 					sglog.Error("parse data error")
-					sgthread.DelayExit(2)
-					continue
+					return
 				}
 				ttdataV.Tips = v
 				if _, ok := alldata[ttdataV.Tips]; ok {
@@ -187,7 +185,7 @@ func WriteXlsx(resultfile string, alldatas map[string][]*Data) {
 			}
 		} else {
 			sglog.Error("can't find tips,", tips.Tips)
-			sgthread.DelayExit(2)
+			return
 		}
 	}
 
@@ -207,7 +205,7 @@ func WriteXlsx(resultfile string, alldatas map[string][]*Data) {
 
 	if err != nil {
 		sglog.Error("save file error,err:", err)
-		sgthread.DelayExit(2)
+		return
 	}
 	sglog.Info("write all data complete")
 }
