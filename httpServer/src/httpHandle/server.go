@@ -15,6 +15,9 @@ func UploadFileHandler() http.HandlerFunc {
 			sglog.Error("check size error", err)
 			return
 		}
+
+		sglog.Info("require data:", r.Form)
+
 		// parse and validate file and post parameters
 		file, index, err := checkAllowFiles(w, r)
 		if err != nil {
