@@ -48,11 +48,7 @@ func (data TipDataList) Swap(i, j int) {
 	data[i], data[j] = data[j], data[i]
 }
 
-func StartParse(filename string, resultfile string, flag chan bool) error {
-
-	defer func() {
-		flag <- true
-	}()
+func StartParse(filename string, resultfile string) error {
 
 	sglog.Info("start parse ", filename)
 
