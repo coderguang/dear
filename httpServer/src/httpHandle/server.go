@@ -38,7 +38,7 @@ func UploadFileHandler() http.HandlerFunc {
 			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
 			return
 		}
-		w.Write([]byte("SUCCESS to commit file,please wait......"))
+		w.Write([]byte("SUCCESS to commit file,please wait......\n"))
 
 		err = doLogic(w, index, filename, resultfile)
 		if err != nil {

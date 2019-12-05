@@ -22,12 +22,12 @@ func main() {
 
 	http.HandleFunc(config.GlobalCfg.Upload, httpHandle.UploadFileHandler())
 
-	fs := http.FileServer(http.Dir(config.GlobalCfg.UploadPath))
-	http.Handle(config.GlobalCfg.DownloadPath, http.StripPrefix(config.GlobalCfg.DownloadPath, fs))
+	// fs := http.FileServer(http.Dir(config.GlobalCfg.UploadPath))
+	// http.Handle(config.GlobalCfg.DownloadPath, http.StripPrefix(config.GlobalCfg.DownloadPath, fs))
 
 	serverUrl := "0.0.0.0:" + strconv.Itoa(config.GlobalCfg.Port)
 	sglog.Info("Server started on ", serverUrl, ", use ", config.GlobalCfg.Upload, " for uploading files and ", config.GlobalCfg.Download, "/{fileName} for downloading")
-	log.Fatal(http.ListenAndServe(serverUrl, nil))
+	go http.ListenAndServe(serverUrl, nil)
 
 	sgcmd.StartCmdWaitInputLoop()
 
