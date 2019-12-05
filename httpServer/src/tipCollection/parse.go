@@ -1,6 +1,7 @@
 package tipCollection
 
 import (
+	"errors"
 	"sort"
 	"strconv"
 	"strings"
@@ -47,7 +48,7 @@ func (data TipDataList) Swap(i, j int) {
 	data[i], data[j] = data[j], data[i]
 }
 
-func StartParse(filename string, resultfile string, flag chan bool) {
+func StartParse(filename string, resultfile string, flag chan bool) error {
 
 	defer func() {
 		flag <- true
@@ -58,14 +59,14 @@ func StartParse(filename string, resultfile string, flag chan bool) {
 	xls, err := excelize.OpenFile(filename)
 	if err != nil {
 		sglog.Fatal("read file:", filename, "error,err:s", err)
-		return
+		return errors.New("read file:" + filename + "error,err:s" + err.Error())
 	}
 
 	sheetName := "root"
 	rows, err := xls.Rows(sheetName)
 	if err != nil {
 		sglog.Error("读取 ", sheetName, " 工作表 错误,err=", err)
-		return
+		return errors.New("读取 " + sheetName + " 工作表 错误,err=" + err.Error())
 	}
 
 	totalline := 0
@@ -112,7 +113,7 @@ func StartParse(filename string, resultfile string, flag chan bool) {
 				ttdataV, ok := ttdata.(*Data)
 				if !ok {
 					sglog.Error("parse data error")
-					return
+					return errors.New("parse data error")
 				}
 				ttdataV.Tips = v
 				if _, ok := alldata[ttdataV.Tips]; ok {
@@ -127,10 +128,10 @@ func StartParse(filename string, resultfile string, flag chan bool) {
 	}
 
 	sglog.Info("total line:", totalline, "total tips:", len(alldata))
-	WriteXlsx(resultfile, alldata)
+	return WriteXlsx(resultfile, alldata)
 }
 
-func WriteXlsx(resultfile string, alldatas map[string][]*Data) {
+func WriteXlsx(resultfile string, alldatas map[string][]*Data) error {
 	totalline := 0
 	tipsArray := TipDataList{}
 	for k, v := range alldatas {
@@ -185,7 +186,7 @@ func WriteXlsx(resultfile string, alldatas map[string][]*Data) {
 			}
 		} else {
 			sglog.Error("can't find tips,", tips.Tips)
-			return
+			return errors.New("can't find tips," + tips.Tips)
 		}
 	}
 
@@ -205,7 +206,8 @@ func WriteXlsx(resultfile string, alldatas map[string][]*Data) {
 
 	if err != nil {
 		sglog.Error("save file error,err:", err)
-		return
+		return errors.New("save file error,err:," + err.Error())
 	}
 	sglog.Info("write all data complete")
+	return nil
 }
