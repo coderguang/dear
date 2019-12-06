@@ -9,7 +9,12 @@ func init() {
 var GlobalCfg *Cfg
 
 type Cfg struct {
-	Port int `json:"port"`
+	Port         int    `json:"port"`
+	MaxSize      int    `json:"maxSize"`
+	UploadPath   string `json:"uploadPath"`
+	DownloadPath string `json:"downloadPath"`
+	Upload       string `json:"upload"`
+	Download     string `json:"download"`
 }
 
 func InitCfg(filename string) error {

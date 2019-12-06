@@ -1,21 +1,85 @@
 package httpHandle
 
 import (
+	"crypto/rand"
+	"fmt"
+	"httpServer/src/config"
+	"io/ioutil"
+	"mime"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/coderguang/GameEngine_go/sglog"
 )
 
-type web_server struct{}
+func UploadFileHandler() http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// validate file size
 
-func (h *web_server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	chanFlag := make(chan bool)
-	<-chanFlag
+		maxUploadSize := int64(config.GlobalCfg.MaxSize * 1024 * 1024)
+
+		r.Body = http.MaxBytesReader(w, r.Body, maxUploadSize)
+		if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+			renderError(w, "FILE_TOO_BIG", http.StatusBadRequest)
+			return
+		}
+
+		// parse and validate file and post parameters
+		file, _, err := r.FormFile("uploadFile")
+		if err != nil {
+			renderError(w, "INVALID_FILE", http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			renderError(w, "INVALID_FILE", http.StatusBadRequest)
+			return
+		}
+
+		// check file type, detectcontenttype only needs the first 512 bytes
+		detectedFileType := http.DetectContentType(fileBytes)
+		switch detectedFileType {
+		case "image/jpeg", "image/jpg":
+		case "image/gif", "image/png":
+		case "application/pdf":
+			break
+		default:
+			renderError(w, "INVALID_FILE_TYPE", http.StatusBadRequest)
+			return
+		}
+		fileName := randToken(12)
+		fileEndings, err := mime.ExtensionsByType(detectedFileType)
+		if err != nil {
+			renderError(w, "CANT_READ_FILE_TYPE", http.StatusInternalServerError)
+			return
+		}
+		newPath := filepath.Join(config.GlobalCfg.UploadPath, fileName+fileEndings[0])
+		sglog.Debug("FileType: ", detectedFileType, ", File: ", newPath)
+
+		// write file
+		newFile, err := os.Create(newPath)
+		if err != nil {
+			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+			return
+		}
+		defer newFile.Close() // idempotent, okay to call twice
+		if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
+			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+			return
+		}
+		w.Write([]byte("SUCCESS"))
+	})
 }
 
-func NewWebServer(port string) {
-	http.Handle("/", &web_server{})
-	port = "0.0.0.0:" + port
-	sglog.Info("start web server.listen port:", port)
-	http.ListenAndServe(port, nil)
+func renderError(w http.ResponseWriter, message string, statusCode int) {
+	w.WriteHeader(http.StatusBadRequest)
+	w.Write([]byte(message))
+}
+
+func randToken(len int) string {
+	b := make([]byte, len)
+	rand.Read(b)
+	return fmt.Sprintf("%x", b)
 }
