@@ -23,6 +23,16 @@
             "env": {    
             },
             "args": ["./data/data.txt"]
+        },
+        {
+            "name": "httpServer",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/httpServer/main.go",
+            "env": {    
+            },
+            "args": ["./data/data.txt"]
         }
     ]
 }
