@@ -6,7 +6,7 @@
         {
             "label": "planCollection",
             "type": "shell",
-            "command": "go build -o ${workspaceFolder}/planCollection.exe ${workspaceFolder}/planCollection/main.go",
+            "command": "cd ${workspaceFolder}/planCollection && go build",
             "args": [],
             "problemMatcher": [
                 "$go"
@@ -27,7 +27,7 @@
         {
             "label": "tipsCollection",
             "type": "shell",
-            "command": "go build -o ${workspaceFolder}/tipsCollection/tipCollection.exe ${workspaceFolder}/tipsCollection/main.go",
+            "command": "cd ${workspaceFolder}/tipsCollection && go build",
             "args": [],
             "problemMatcher": [
                 "$go"
