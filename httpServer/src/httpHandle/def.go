@@ -2,6 +2,7 @@ package httpHandle
 
 import (
 	"crypto/rand"
+	"httpServer/src/config"
 	"fmt"
 	"net/http"
 )
@@ -9,12 +10,12 @@ import (
 var GlobalTypeList []string
 var GlobalFileType []string
 var GlobalFileNum []int
-var GLobalFileSuffix []string
+var GlobalFileSuffix []string
 
 func init() {
-	GlobalTypeList = []string{"tipCollection"}
+	GlobalTypeList = []string{config.TIP_COLLECTION}
 	GlobalFileType = []string{"application/zip"}
-	GLobalFileSuffix = []string{".xlsx"}
+	GlobalFileSuffix = []string{".xlsx"}
 	GlobalFileNum = []int{}
 	for i := 0; i < len(GlobalTypeList); i++ {
 		GlobalFileNum = append(GlobalFileNum, 0)

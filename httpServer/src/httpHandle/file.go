@@ -1,16 +1,21 @@
 package httpHandle
 
-import "httpServer/src/config"
+import (
+	"httpServer/src/config"
+	"strconv"
 
-import "github.com/coderguang/GameEngine_go/sgtime"
+	"github.com/coderguang/GameEngine_go/sgfile"
+	"github.com/coderguang/GameEngine_go/sglog"
+	"github.com/coderguang/GameEngine_go/sgstring"
+	"github.com/coderguang/GameEngine_go/sgtime"
+)
 
-import "strconv"
-
-func getPathAndFileName(index int) (string, string) {
+func getPathAndFileName(index int) (string, string, string) {
 	path := config.GlobalCfg.UploadPath + "/" + GlobalTypeList[index]
-	filename := path + "/" + getNumString(index) + GLobalFileSuffix[index]
-
-	return path, filename
+	rangdomStr := sgstring.RandNumStringRunes(5)
+	filename := path + "/" + getNumString(index) + rangdomStr + GlobalFileSuffix[index]
+	resultfile := path + "/" + getNumString(index) + rangdomStr + "_result" + GlobalFileSuffix[index]
+	return path, filename, resultfile
 }
 
 func getNumString(index int) string {
@@ -27,4 +32,18 @@ func getNumString(index int) string {
 		curStr = strconv.Itoa(cur)
 	}
 	return monthDay + curStr
+}
+
+func writefile(filename string, fileBytes []byte) error {
+	newFile, err := sgfile.Create(filename)
+	if err != nil {
+		sglog.Error("crete file error,", err)
+		return err
+	}
+	defer newFile.Close() // idempotent, okay to call twice
+	if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
+		sglog.Error("write to file error")
+		return err
+	}
+	return nil
 }

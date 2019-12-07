@@ -28,23 +28,23 @@ func UploadFileHandler() http.HandlerFunc {
 			return
 		}
 
-		filePath, filename := getPathAndFileName(index)
+		filePath, filename, resultfile := getPathAndFileName(index)
 		sgfile.AutoMkDir(filePath)
 		sglog.Debug("receive file:", filename)
 
 		// write file
-		newFile, err := sgfile.Create(filename)
+		err = writefile(filename, fileBytes)
 		if err != nil {
-			sglog.Error("crete file error,", err)
 			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
 			return
 		}
-		defer newFile.Close() // idempotent, okay to call twice
-		if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
-			sglog.Error("write to file error")
-			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+		w.Write([]byte("SUCCESS to commit file,please wait......"))
+
+		err = doLogic(w, index, filename, resultfile)
+		if err != nil {
+			renderError(w, "DO_LOGIC_ERROR", http.StatusInternalServerError)
 			return
 		}
-		w.Write([]byte("SUCCESS to commit file,please wait"))
+		sglog.Info("do logic ok,", filename)
 	})
 }
