@@ -11,6 +11,7 @@
 *.xlsx
 debug
 debug.test
+*__debug_bin*
 /log/*
 
 # Test binary, build with `go test -c`
