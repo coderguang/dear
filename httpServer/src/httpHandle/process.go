@@ -19,3 +19,4 @@ func doLogic(w http.ResponseWriter, index int, filename string,resultfile string
 
 	return errors.New("unknow logic type,index:" + strconv.Itoa(index) + ",file:" + filename+",result:"+resultfile)
 }
+go
