@@ -8,15 +8,14 @@ import (
 	"strconv"
 )
 
-func doLogic(w http.ResponseWriter, index int, filename string,resultfile string) error {
+func doLogic(w http.ResponseWriter, index int, filename string, resultfile string) error {
 
 	logicType := GlobalTypeList[index]
 
 	switch logicType {
 	case config.TIP_COLLECTION:
-		return tipCollection.DoLogic(w, filename,resultfile)
+		return tipCollection.DoLogic(w, filename, resultfile)
 	}
 
-	return errors.New("unknow logic type,index:" + strconv.Itoa(index) + ",file:" + filename+",result:"+resultfile)
+	return errors.New("unknow logic type,index:" + strconv.Itoa(index) + ",file:" + filename + ",result:" + resultfile)
 }
-go
