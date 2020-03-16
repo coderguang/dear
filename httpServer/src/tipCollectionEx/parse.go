@@ -37,9 +37,6 @@ func StartParse(filename string, resultfile string) error {
 	for i := 2; i <= totalline; i++ {
 		posStr := strconv.Itoa(i)
 		userName := xls.GetCellValue(sheetName, "A"+posStr)
-		if i > 100 {
-			break
-		}
 		if userName == "" {
 			continue
 		}
