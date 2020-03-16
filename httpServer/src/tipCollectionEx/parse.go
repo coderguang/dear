@@ -33,7 +33,15 @@ func StartParse(filename string, resultfile string) error {
 		posStr := strconv.Itoa(totalline)
 		userName := xls.GetCellValue(sheetName, "A"+posStr)
 		if userName == "" {
-			break
+			//recheck next two column
+			userName = xls.GetCellValue(sheetName, "A"+strconv.Itoa(totalline+1))
+			if userName == "" {
+				userName = xls.GetCellValue(sheetName, "A"+strconv.Itoa(totalline+2))
+				if userName == "" {
+					break
+				}
+			}
+
 		}
 		totalline++
 		breakLine = totalline
