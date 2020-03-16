@@ -151,10 +151,6 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 	indexNum := file.NewSheet(sheetNameNum)
 	file.SetActiveSheet(indexNum)
 
-	for index, v := range orderStr {
-		file.SetCellStr(sheetNameNum, v+"1", descStr[index])
-	}
-
 	//write tagNum tags
 	file.SetCellStr(sheetNameNum, "A1", "标签总数量")
 	file.SetCellStr(sheetNameNum, "A2", strconv.Itoa(totalTagType))
