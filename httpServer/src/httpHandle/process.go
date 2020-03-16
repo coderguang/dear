@@ -3,6 +3,7 @@ package httpHandle
 import (
 	"httpServer/src/config"
 	"httpServer/src/tipCollection"
+	"httpServer/src/tipCollectionEx"
 	"net/http"
 	"strconv"
 )
@@ -14,6 +15,9 @@ func doLogic(w http.ResponseWriter, index int, filename string, resultfile strin
 	switch logicType {
 	case config.TIP_COLLECTION:
 		tipCollection.DoLogic(w, filename, resultfile)
+		return
+	case config.TIP_COLLECTION_EX:
+		tipCollectionEx.DoLogic(w, filename, resultfile)
 		return
 	}
 
