@@ -109,7 +109,7 @@ func StartParse(filename string, resultfile string) error {
 
 func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[int]map[string]int) error {
 
-	sglog.Info("start write to file,breakline:", breakline, ",breakName:", breakName)
+	sglog.Info("start write to file,breakline:", breakLine, ",breakName:", breakName)
 
 	file := excelize.NewFile()
 	sheetName := "result"
