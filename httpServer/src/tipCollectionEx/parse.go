@@ -109,15 +109,7 @@ func StartParse(filename string, resultfile string) error {
 
 func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[int]map[string]int) error {
 
-	for k, v := range mapData {
-		tipColumn := "tag" + strconv.Itoa(k)
-		sglog.Info("next is ", tipColumn, " data")
-		for kk, vv := range v {
-			sglog.Debug("tag:", kk, ",num:", vv)
-		}
-	}
-
-	sglog.Info("start write to file ")
+	sglog.Info("start write to file,breakline:", breakline, ",breakName:", breakName)
 
 	file := excelize.NewFile()
 	sheetName := "result"
