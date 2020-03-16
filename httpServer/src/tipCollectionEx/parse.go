@@ -27,8 +27,17 @@ func StartParse(filename string, resultfile string) error {
 	}
 
 	totalline := 0
+	breakLine := 0
+	breakUserName := ""
 	for rows.Next() {
+		posStr := strconv.Itoa(totalline)
+		userName := xls.GetCellValue(sheetName, "A"+posStr)
+		if userName == "" {
+			break
+		}
 		totalline++
+		breakLine = totalline
+		breakUserName = userName
 	}
 
 	allTags := [10][]string{}
@@ -95,10 +104,10 @@ func StartParse(filename string, resultfile string) error {
 
 	}
 
-	return WriteXlsx(resultfile, mapAllTags)
+	return WriteXlsx(resultfile, breakUserName, breakLine, mapAllTags)
 }
 
-func WriteXlsx(resultfile string, mapData map[int]map[string]int) error {
+func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[int]map[string]int) error {
 
 	for k, v := range mapData {
 		tipColumn := "tag" + strconv.Itoa(k)
@@ -149,6 +158,12 @@ func WriteXlsx(resultfile string, mapData map[int]map[string]int) error {
 	//write tagNum tags
 	file.SetCellStr(sheetNameNum, "A1", "标签总数量")
 	file.SetCellStr(sheetNameNum, "A2", strconv.Itoa(totalTagType))
+
+	file.SetCellStr(sheetNameNum, "B1", "终止检测行数")
+	file.SetCellStr(sheetNameNum, "B2", strconv.Itoa(breakLine))
+
+	file.SetCellStr(sheetNameNum, "C1", "最后一个检测的客户端名称")
+	file.SetCellStr(sheetNameNum, "C2", breakName)
 
 	err := file.SaveAs(resultfile)
 

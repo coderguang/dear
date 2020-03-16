@@ -2,6 +2,7 @@ package httpHandle
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/coderguang/GameEngine_go/sgfile"
 	"github.com/coderguang/GameEngine_go/sglog"
@@ -43,6 +44,9 @@ func UploadFileHandler() http.HandlerFunc {
 			return
 		}
 		sglog.Info("SUCCESS to commit file,please wait......\n")
+		startDt := time.Now()
 		doLogic(w, index, filename, resultfile)
+		endDt := time.Now()
+		sglog.Info("process all ok,\n starDt:", startDt, "\n endDt:", endDt)
 	})
 }
