@@ -26,7 +26,7 @@ func StartParse(filename string, resultfile string) error {
 		return errors.New("读取 " + sheetName + " 工作表 错误,err=" + err.Error())
 	}
 
-	totalline := 0
+	totalline := 1
 	breakLine := 0
 	breakUserName := ""
 	for rows.Next() {
