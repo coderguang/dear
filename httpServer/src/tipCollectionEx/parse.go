@@ -48,7 +48,7 @@ func StartParse(filename string, resultfile string) error {
 		breakUserName = userName
 	}
 
-	allTags := [10][]string{}
+	allTags := [13][]string{}
 
 	realLine := 0
 	for i := 2; i <= totalline; i++ {
@@ -67,6 +67,9 @@ func StartParse(filename string, resultfile string) error {
 		Tag7 := xls.GetCellValue(sheetName, "S"+posStr)
 		Tag8 := xls.GetCellValue(sheetName, "T"+posStr)
 		Tag9 := xls.GetCellValue(sheetName, "U"+posStr)
+		Tag10 := xls.GetCellValue(sheetName, "V"+posStr)
+		Tag11 := xls.GetCellValue(sheetName, "W"+posStr)
+		Tag12 := xls.GetCellValue(sheetName, "X"+posStr)
 
 		allTags[0] = append(allTags[0], Tag0)
 		allTags[1] = append(allTags[1], Tag1)
@@ -78,6 +81,9 @@ func StartParse(filename string, resultfile string) error {
 		allTags[7] = append(allTags[7], Tag7)
 		allTags[8] = append(allTags[8], Tag8)
 		allTags[9] = append(allTags[9], Tag9)
+		allTags[10] = append(allTags[10], Tag10)
+		allTags[11] = append(allTags[11], Tag11)
+		allTags[12] = append(allTags[12], Tag12)
 
 		realLine++
 	}
@@ -86,7 +92,7 @@ func StartParse(filename string, resultfile string) error {
 
 	mapAllTags := make(map[int]map[string]int)
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 13; i++ {
 		for _, v := range allTags[i] {
 			if v == "" {
 				continue
@@ -124,10 +130,10 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 	index := file.NewSheet(sheetName)
 	file.SetActiveSheet(index)
 
-	orderStr := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
+	orderStr := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"}
 	descStr := []string{"标签组1(客户登记)", "标签组2(兴趣爱好)", "标签组3(职业)", "标签组4(客户类型)",
 		"标签组5(站外来源渠道)", "标签组6(站内来源渠道)", "标签组7(人生阶段)", "标签组8(婚恋育儿状态)",
-		"标签组9(年龄段)", "标签组10(性别)"}
+		"标签组9(年龄段)", "标签组10(性别)", "标签组11", "标签组12", "标签组13"}
 
 	for index, v := range orderStr {
 		file.SetCellStr(sheetName, v+"1", descStr[index])
