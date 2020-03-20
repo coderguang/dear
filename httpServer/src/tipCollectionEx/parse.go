@@ -132,8 +132,8 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 
 	orderStr := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"}
 	descStr := []string{"标签组1(客户登记)", "标签组2(兴趣爱好)", "标签组3(职业)", "标签组4(客户类型)",
-		"标签组5(站外来源渠道)", "标签组6(站内来源渠道)", "标签组7(人生阶段)", "标签组8(婚恋育儿状态)",
-		"标签组9(年龄段)", "标签组10(性别)", "标签组11", "标签组12", "标签组13"}
+		"标签组5(站外来源渠道)", "标签组6(站内来源渠道)", "标签组7(人生阶段)", "标签组8(年龄段)",
+		"标签组9(性别)", "标签组10(肌肤类型)", "标签组11(肌肤问题)", "标签组12(购买商品类目)", "标签组13(购物侧重点)"}
 
 	for index, v := range orderStr {
 		file.SetCellStr(sheetName, v+"1", descStr[index])
