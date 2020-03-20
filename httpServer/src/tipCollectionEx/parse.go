@@ -141,6 +141,7 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 
 	//write detail tags
 	totalTagType := 0
+	totalTagNum := 0
 	for k, v := range mapData {
 		curLine := 2
 		for kk, vv := range v {
@@ -149,6 +150,7 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 				curLineStr := strconv.Itoa(curLine)
 				file.SetCellStr(sheetName, orderStr[k]+curLineStr, kk)
 				curLine++
+				totalTagNum++
 			}
 		}
 	}
@@ -158,14 +160,17 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 	file.SetActiveSheet(indexNum)
 
 	//write tagNum tags
-	file.SetCellStr(sheetNameNum, "A1", "标签总数量")
+	file.SetCellStr(sheetNameNum, "A1", "标签总类别数量")
 	file.SetCellStr(sheetNameNum, "A2", strconv.Itoa(totalTagType))
 
-	file.SetCellStr(sheetNameNum, "B1", "终止检测行数")
-	file.SetCellStr(sheetNameNum, "B2", strconv.Itoa(breakLine))
+	file.SetCellStr(sheetNameNum, "B1", "标签总数量")
+	file.SetCellStr(sheetNameNum, "B2", strconv.Itoa(totalTagNum))
 
-	file.SetCellStr(sheetNameNum, "C1", "最后一个检测的客户端名称")
-	file.SetCellStr(sheetNameNum, "C2", breakName)
+	file.SetCellStr(sheetNameNum, "C1", "终止检测行数")
+	file.SetCellStr(sheetNameNum, "C2", strconv.Itoa(breakLine))
+
+	file.SetCellStr(sheetNameNum, "D1", "最后一个检测的客户端名称")
+	file.SetCellStr(sheetNameNum, "D2", breakName)
 
 	err := file.SaveAs(resultfile)
 
