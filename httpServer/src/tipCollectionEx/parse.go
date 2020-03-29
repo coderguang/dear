@@ -188,9 +188,6 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 	for _, v := range phoneList {
 		tipList, ok := phoneTipMaps[v]
 		if ok {
-			if len(tipList) > 14 {
-				sglog.Debug("append ok")
-			}
 			for k, tipV := range tipList {
 				if tipV == "" {
 					continue
