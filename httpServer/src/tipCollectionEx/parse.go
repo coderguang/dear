@@ -2,6 +2,7 @@ package tipCollectionEx
 
 import (
 	"errors"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -49,7 +50,7 @@ func StartParse(filename string, resultfile string) error {
 	}
 
 	allTags := [13][]string{}
-
+	phoneTipMaps := make(map[string][]string)
 	realLine := 0
 	for i := 2; i <= totalline; i++ {
 		posStr := strconv.Itoa(i)
@@ -57,6 +58,7 @@ func StartParse(filename string, resultfile string) error {
 		if userName == "" {
 			continue
 		}
+		phone := xls.GetCellValue(sheetName, "K"+posStr)
 		Tag0 := xls.GetCellValue(sheetName, "L"+posStr)
 		Tag1 := xls.GetCellValue(sheetName, "M"+posStr)
 		Tag2 := xls.GetCellValue(sheetName, "N"+posStr)
@@ -85,6 +87,16 @@ func StartParse(filename string, resultfile string) error {
 		allTags[11] = append(allTags[11], Tag11)
 		allTags[12] = append(allTags[12], Tag12)
 
+		if phone != "" {
+			tipList, ok := phoneTipMaps[phone]
+			if ok {
+				tipList = append(tipList, Tag0, Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8, Tag9, Tag10, Tag11, Tag12)
+				phoneTipMaps[phone] = tipList
+			} else {
+				phoneTipMaps[phone] = []string{Tag0, Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8, Tag9, Tag10, Tag11, Tag12}
+			}
+			//sglog.Debug("tiplist", tipList)
+		}
 		realLine++
 	}
 
@@ -118,10 +130,10 @@ func StartParse(filename string, resultfile string) error {
 
 	}
 
-	return WriteXlsx(resultfile, breakUserName, breakLine, mapAllTags)
+	return WriteXlsx(resultfile, breakUserName, breakLine, mapAllTags, phoneTipMaps)
 }
 
-func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[int]map[string]int) error {
+func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[int]map[string]int, phoneTipMaps map[string][]string) error {
 
 	sglog.Info("start write to file,breakline:", breakLine, ",breakName:", breakName)
 
@@ -151,6 +163,46 @@ func WriteXlsx(resultfile string, breakName string, breakLine int, mapData map[i
 				file.SetCellStr(sheetName, orderStr[k]+curLineStr, kk)
 				curLine++
 				totalTagNum++
+			}
+		}
+	}
+
+	//write phone list
+
+	sheetNamePhone := "phone"
+	index = file.NewSheet(sheetNamePhone)
+	file.SetActiveSheet(index)
+
+	file.SetCellStr(sheetNamePhone, "A1", "电话号码")
+	file.SetCellStr(sheetNamePhone, "B1", "标签")
+	file.SetCellStr(sheetNamePhone, "C1", "所属标签组")
+
+	phoneList := []string{}
+	for k, _ := range phoneTipMaps {
+		phoneList = append(phoneList, k)
+	}
+
+	sort.Strings(phoneList)
+
+	writePhoneIndex := 2
+	for _, v := range phoneList {
+		tipList, ok := phoneTipMaps[v]
+		if ok {
+			if len(tipList) > 14 {
+				sglog.Debug("append ok")
+			}
+			for k, tipV := range tipList {
+				if tipV == "" {
+					continue
+				}
+				singleTipList := strings.Split(tipV, ",")
+				for _, singleV := range singleTipList {
+					curLineStr := strconv.Itoa(writePhoneIndex)
+					file.SetCellStr(sheetNamePhone, "A"+curLineStr, v)
+					file.SetCellStr(sheetNamePhone, "B"+curLineStr, singleV)
+					file.SetCellStr(sheetNamePhone, "C"+curLineStr, descStr[k%13])
+					writePhoneIndex++
+				}
 			}
 		}
 	}

@@ -9,7 +9,7 @@
     <title>文件上传进度条</title>
 </head>
 <body>
-    <input id="fileInput" type="file" name="" />
+    <input id="fileInput" type="file" name="tipCollectionEx" />
     <span id="progress">0%</span>
     <a id="upload" href="javascript:;">上传</a>
 
@@ -21,7 +21,7 @@
                 return
             }
             var params = new FormData();
-            params.append('file', file);
+            //params.append('file', file);
             params.append('otherParams', 'xxx'); // 其他必要参数
 
             var xhr = new XMLHttpRequest();
@@ -40,7 +40,7 @@
             xhr.upload.onprogress = function (e) {
                 progress.innerHTML = Math.round(e.loaded / e.total * 100) + '%';
             }
-            xhr.open('POST', '/api/upload.php', true);
+            xhr.open('POST', '/httpServer/upload', true);
             xhr.send(params);
         });
 
