@@ -1,5 +1,8 @@
-package worldToVoice
+package wordToVoice
 
+const (
+	WORD_MAX_LEN int = 1800
+)
 
 type SRequireParam struct {
 	Common struct {

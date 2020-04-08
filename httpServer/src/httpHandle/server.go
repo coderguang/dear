@@ -45,7 +45,9 @@ func UploadFileHandler() http.HandlerFunc {
 		}
 		sglog.Info("SUCCESS to commit file,please wait......\n")
 		startDt := time.Now()
-		doLogic(w, index, filename, resultfile)
+		flag := make(chan bool)
+		go doLogic(w, index, filename, resultfile, flag)
+		<-flag
 		endDt := time.Now()
 		sglog.Info("process all ok,\n starDt:", startDt, "\n endDt:", endDt)
 	})

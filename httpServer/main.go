@@ -3,7 +3,6 @@ package main
 import (
 	"httpServer/src/config"
 	"httpServer/src/httpHandle"
-	"httpServer/src/worldToVoice"
 	"log"
 	"net/http"
 	"strconv"
@@ -19,11 +18,7 @@ func main() {
 
 	sglog.Info("start dear http server...")
 
-	config.InitCfg("./../../../globalConfig/dear/httpServer/")
-
-	worldToVoice.TestConn()
-
-	sgcmd.StartCmdWaitInputLoop()
+	config.InitCfg("./../../globalConfig/dear/httpServer/")
 
 	http.HandleFunc(config.GlobalCfg.Upload, httpHandle.UploadFileHandler())
 

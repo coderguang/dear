@@ -9,6 +9,7 @@
 *.pdf
 *.xls
 *.xlsx
+*.mp3
 debug
 debug.test
 *__debug_bin*

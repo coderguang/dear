@@ -11,12 +11,14 @@ var GlobalTypeList []string
 var GlobalFileType []string
 var GlobalFileNum []int
 var GlobalFileSuffix []string
+var GlobalResultFileSuffix []string
 
 func init() {
 	//三个需要相同长度
-	GlobalTypeList = []string{config.TIP_COLLECTION, config.TIP_COLLECTION_EX}
-	GlobalFileType = []string{"application/zip", "application/zip"}
-	GlobalFileSuffix = []string{"xlsx", "xlsx"}
+	GlobalTypeList = []string{config.TIP_COLLECTION, config.TIP_COLLECTION_EX, config.WORLD_TO_VOICE}
+	GlobalFileType = []string{"application/zip", "application/zip", "text/plain; charset=utf-8"}
+	GlobalFileSuffix = []string{"xlsx", "xlsx", "txt"}
+	GlobalResultFileSuffix = []string{"xlsx", "xlsx", "mp3"}
 	GlobalFileNum = []int{}
 	for i := 0; i < len(GlobalTypeList); i++ {
 		GlobalFileNum = append(GlobalFileNum, 0)

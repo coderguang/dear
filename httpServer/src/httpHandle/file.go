@@ -14,7 +14,7 @@ func getPathAndFileName(index int) (string, string, string) {
 	path := config.GlobalCfg.UploadPath + "/" + GlobalTypeList[index]
 	rangdomStr := sgstring.RandNumStringRunes(5)
 	filename := path + "/" + getNumString(index) + rangdomStr + "." + GlobalFileSuffix[index]
-	resultfile := path + "/" + getNumString(index) + rangdomStr + "_result." + GlobalFileSuffix[index]
+	resultfile := path + "/" + getNumString(index) + rangdomStr + "_result." + GlobalResultFileSuffix[index]
 	return path, filename, resultfile
 }
 

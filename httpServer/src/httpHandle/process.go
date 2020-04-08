@@ -4,11 +4,16 @@ import (
 	"httpServer/src/config"
 	"httpServer/src/tipCollection"
 	"httpServer/src/tipCollectionEx"
+	"httpServer/src/wordToVoice"
 	"net/http"
 	"strconv"
 )
 
-func doLogic(w http.ResponseWriter, index int, filename string, resultfile string) {
+func doLogic(w http.ResponseWriter, index int, filename string, resultfile string, flag chan bool) {
+
+	defer func() {
+		flag <- true
+	}()
 
 	logicType := GlobalTypeList[index]
 
@@ -18,6 +23,9 @@ func doLogic(w http.ResponseWriter, index int, filename string, resultfile strin
 		return
 	case config.TIP_COLLECTION_EX:
 		tipCollectionEx.DoLogic(w, filename, resultfile)
+		return
+	case config.WORLD_TO_VOICE:
+		wordToVoice.DoLogic(w, filename, resultfile)
 		return
 	}
 

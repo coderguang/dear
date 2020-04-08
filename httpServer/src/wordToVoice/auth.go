@@ -1,4 +1,4 @@
-package worldToVoice
+package wordToVoice
 
 import (
 	"crypto/hmac"
