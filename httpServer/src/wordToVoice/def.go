@@ -36,7 +36,7 @@ func NewParam() *SRequireParam {
 	tmp.Business.Aue = "lame"
 	tmp.Business.Sfl = 1
 	tmp.Business.Auf = "audio/L16;rate=16000"
-	tmp.Business.Vcn = "xiaoyan"
+	tmp.Business.Vcn = "x2_xiaoyuan"
 	tmp.Business.Speed = 50
 	tmp.Business.Volume = 50
 	tmp.Business.Pitch = 50
