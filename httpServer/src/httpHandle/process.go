@@ -4,7 +4,7 @@ import (
 	"httpServer/src/config"
 	"httpServer/src/tipCollection"
 	"httpServer/src/tipCollectionEx"
-	"httpServer/src/wordToVoice"
+	"httpServer/src/wordToVoiceEx"
 	"net/http"
 	"strconv"
 )
@@ -25,7 +25,7 @@ func doLogic(w http.ResponseWriter, index int, filename string, resultfile strin
 		tipCollectionEx.DoLogic(w, filename, resultfile)
 		return
 	case config.WORLD_TO_VOICE:
-		wordToVoice.DoLogic(w, filename, resultfile)
+		wordToVoiceEx.DoLogic(w, filename, resultfile)
 		return
 	}
 

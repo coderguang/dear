@@ -1,4 +1,4 @@
-package wordToVoice
+package wordToVoiceEx
 
 import (
 	"io/ioutil"
