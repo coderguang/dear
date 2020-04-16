@@ -16,7 +16,7 @@ func init() {
 	//三个需要相同长度
 	GlobalTypeList = []string{config.TIP_COLLECTION, config.TIP_COLLECTION_EX}
 	GlobalFileType = []string{"application/zip", "application/zip"}
-	GlobalFileSuffix = []string{".xlsx", "xlsx"}
+	GlobalFileSuffix = []string{"xlsx", "xlsx"}
 	GlobalFileNum = []int{}
 	for i := 0; i < len(GlobalTypeList); i++ {
 		GlobalFileNum = append(GlobalFileNum, 0)
