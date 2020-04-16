@@ -46,7 +46,7 @@ func checkFileTypeMatch(w http.ResponseWriter, r *http.Request, index int, file 
 	// check file type, detectcontenttype only needs the first 512 bytes
 	detectedFileType := http.DetectContentType(fileBytes)
 	if detectedFileType != GlobalFileType[index] {
-		sglog.Error("file not match")
+		sglog.Error("file not match,upload file type is ", detectedFileType)
 		renderError(w, "INVALID_FILE_TYPE", http.StatusBadRequest)
 	}
 	return fileBytes, nil
